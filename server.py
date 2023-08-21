@@ -1,23 +1,32 @@
-from flask import Flask,request, make_response,jsonify
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-
 @app.route("/calculator/greeting", methods=['GET'])
 def greeting():
-    return "Hello World"
+    return 'Hello World!', 200
 
 @app.route("/calculator/add", methods=['POST'])
 def add():
-    first=request.args.get('first')
-    second=request.args.get('second')
-    return jsonify(result=int(first)+ int (second))
+    data = request.json
+    if 'first' in data and 'second' in data:
+        first = data['first']
+        second = data['second']
+        result = {"result": first + second}
+        return jsonify(result), 200
+    else:
+        return jsonify({"error": "Invalid input"}), 400
 
 @app.route("/calculator/subtract", methods=['POST'])
 def subtract():
-    first=request.args.get('first')
-    second=request.args.get('second')
-    return jsonify(result=int(first)- int (second))
+    data = request.json
+    if 'first' in data and 'second' in data:
+        first = data['first']
+        second = data['second']
+        result = {"result": first - second}
+        return jsonify(result), 200
+    else:
+        return jsonify({"error": "Invalid input"}), 400
 
 if __name__ == '__main__':
-    app.run(port=8080,host='127.0.0.1')
+    app.run(port=8080, host='0.0.0.0')
